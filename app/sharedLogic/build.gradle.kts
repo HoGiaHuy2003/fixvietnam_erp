@@ -7,15 +7,8 @@ plugins {
 }
 
 kotlin {
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "SharedLogic"
-            isStatic = true
-        }
-    }
+    iosArm64()
+    iosSimulatorArm64()
     
     jvm()
     

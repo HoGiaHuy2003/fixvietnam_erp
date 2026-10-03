@@ -21,7 +21,10 @@ import fixvietnam_erp.app.sharedui.generated.resources.compose_multiplatform
 
 @Composable
 @Preview
-fun App() {
+fun App(
+    onOpenNativeSwiftUI: (() -> Unit)? = null,
+    onOpenNativeUIKit: (() -> Unit)? = null,
+) {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(
@@ -33,6 +36,16 @@ fun App() {
         ) {
             Button(onClick = { showContent = !showContent }) {
                 Text("Click me!")
+            }
+            onOpenNativeSwiftUI?.let { openScreen ->
+                Button(onClick = openScreen) {
+                    Text("Open SwiftUI screen")
+                }
+            }
+            onOpenNativeUIKit?.let { openScreen ->
+                Button(onClick = openScreen) {
+                    Text("Open UIKit screen")
+                }
             }
             AnimatedVisibility(showContent) {
                 val greeting = remember { Greeting().greet() }

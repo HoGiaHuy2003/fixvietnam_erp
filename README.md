@@ -1,7 +1,9 @@
 This is a Kotlin Multiplatform project targeting Android, iOS, Web, Desktop (JVM), Server.
 
-* [/app/iosApp](./app/iosApp/iosApp) contains an iOS application. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+* [/app/iosApp](./app/iosApp/iosApp) contains the iOS entry point. It starts in the shared Compose UI.
+  Compose can request native SwiftUI or UIKit screens, which the iOS host presents as sheets.
+  All three use the `SharedUI` framework, which also exports the public API of `sharedLogic`.
+  See the [iOS UI development guide (Vietnamese)](docs/ios-ui-development.md) for setup and screen recipes.
 
 * [/app/sharedLogic](./app/sharedLogic/src) is for the code that will be shared between app targets in the project.
   The most important subfolder is [commonMain](./app/sharedLogic/src/commonMain/kotlin). If preferred, you
@@ -46,7 +48,7 @@ Use the run button in your IDE's editor gutter, or run tests using Gradle tasks:
 - Web tests:
   - Wasm target: `./gradlew :app:sharedUI:wasmJsTest :app:sharedLogic:wasmJsTest`
   - JS target: `./gradlew :app:sharedUI:jsTest :app:sharedLogic:jsTest`
-- iOS tests: `./gradlew :app:sharedLogic:iosSimulatorArm64Test`
+- iOS tests (macOS): `./gradlew :app:sharedUI:iosSimulatorArm64Test :app:sharedLogic:iosSimulatorArm64Test`
 
 ---
 

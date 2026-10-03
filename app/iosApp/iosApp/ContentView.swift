@@ -1,28 +1,47 @@
 import SwiftUI
-import SharedLogic
 
 struct ContentView: View {
-    @State private var showContent = false
-    var body: some View {
-        VStack {
-            Button("Click me!") {
-                withAnimation {
-                    showContent = !showContent
-                }
-            }
+    private enum NativeScreen: String, Identifiable {
+        case swiftUI
+        case uiKit
 
-            if showContent {
-                VStack(spacing: 16) {
-                    Image(systemName: "swift")
-                        .font(.system(size: 200))
-                        .foregroundColor(.accentColor)
-                    Text("SwiftUI: \(Greeting().greet())")
-                }
-                .transition(.move(edge: .top).combined(with: .opacity))
+        var id: String { rawValue }
+
+        var title: String {
+            switch self {
+            case .swiftUI: return "SwiftUI screen"
+            case .uiKit: return "UIKit screen"
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .padding()
+    }
+
+    @State private var nativeScreen: NativeScreen?
+
+    var body: some View {
+        ComposeView(
+            onOpenNativeSwiftUI: { nativeScreen = .swiftUI },
+            onOpenNativeUIKit: { nativeScreen = .uiKit }
+        )
+        .ignoresSafeArea()
+        .sheet(item: $nativeScreen) { screen in
+            NavigationStack {
+                Group {
+                    switch screen {
+                    case .swiftUI:
+                        NativeGreetingView()
+                    case .uiKit:
+                        NativeUIKitView()
+                    }
+                }
+                .navigationTitle(screen.title)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") { nativeScreen = nil }
+                    }
+                }
+            }
+        }
     }
 }
 

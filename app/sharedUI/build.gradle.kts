@@ -9,6 +9,18 @@ plugins {
 }
 
 kotlin {
+    listOf(
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "SharedUI"
+            isStatic = true
+            // SwiftUI screens use the same logic through a single Kotlin framework.
+            export(project(":app:sharedLogic"))
+        }
+    }
+
     jvm()
     
     js {
