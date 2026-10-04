@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -13,7 +14,14 @@ kotlin {
     jvm()
     
     js {
+        outputModuleName = "shared-logic"
         browser()
+        binaries.library()
+        generateTypeScriptDefinitions()
+        compilerOptions {
+            moduleKind.set(JsModuleKind.MODULE_ES)
+            target.set("es2015")
+        }
     }
     
     @OptIn(ExperimentalWasmDsl::class)

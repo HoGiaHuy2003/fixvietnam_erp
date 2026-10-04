@@ -1,0 +1,12 @@
+{
+  "name": "fixvietnam-erp",
+  "private": true,
+  "scripts": {
+    "web:prepare": "node scripts/web.mjs prepare",
+    "web:install": "node scripts/web.mjs install",
+    "web:build": "node scripts/web.mjs build",
+    "web:dev": "node scripts/web.mjs dev",
+    "web:preview": "node scripts/preview-web.mjs",
+    "web:check": "node --test scripts/web-output.test.mjs"
+  }
+}

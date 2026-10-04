@@ -5,7 +5,14 @@ import androidx.compose.ui.window.ComposeViewport
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
+    val openCatalog: (() -> Unit)? = if (isHybridWebHost()) ::openReactCatalog else null
+    val quantityWidget: QuantityWidgetContent? =
+        if (isReactQuantityWidgetAvailable()) ::ReactQuantityWidget else null
     ComposeViewport {
-        App()
+        App(onOpenWebCatalog = openCatalog, quantityWidget = quantityWidget)
     }
 }
+
+internal expect fun isHybridWebHost(): Boolean
+
+internal expect fun openReactCatalog()

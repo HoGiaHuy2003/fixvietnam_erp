@@ -17,3 +17,8 @@ captures
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
+**/.next/
+app/webReact/out/
+app/webReact/public/compose/
+app/webReact/next-env.d.ts
+**/*.tsbuildinfo

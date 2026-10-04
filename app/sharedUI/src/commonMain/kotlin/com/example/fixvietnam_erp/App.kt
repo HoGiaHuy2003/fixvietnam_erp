@@ -3,6 +3,8 @@ package com.example.fixvietnam_erp
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +26,8 @@ import fixvietnam_erp.app.sharedui.generated.resources.compose_multiplatform
 fun App(
     onOpenNativeSwiftUI: (() -> Unit)? = null,
     onOpenNativeUIKit: (() -> Unit)? = null,
+    onOpenWebCatalog: (() -> Unit)? = null,
+    quantityWidget: QuantityWidgetContent? = null,
 ) {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
@@ -31,7 +35,8 @@ fun App(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)
                 .safeContentPadding()
-                .fillMaxSize(),
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Button(onClick = { showContent = !showContent }) {
@@ -47,6 +52,12 @@ fun App(
                     Text("Open UIKit screen")
                 }
             }
+            onOpenWebCatalog?.let { openScreen ->
+                Button(onClick = openScreen) {
+                    Text("Product catalog")
+                }
+            }
+            QuantityWidgetDemo(quantityWidget)
             AnimatedVisibility(showContent) {
                 val greeting = remember { Greeting().greet() }
                 Column(

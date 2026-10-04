@@ -1,5 +1,9 @@
 # Phát triển giao diện iOS cùng Compose Multiplatform
 
+Để thêm màn hình theo từng bước với ví dụ mã đầy đủ, xem [sổ tay triển khai màn hình iOS](ios-screen-recipes.md). Tài liệu hiện tại giải thích kiến trúc, framework và cấu hình nền tảng.
+
+Để nhúng **widget SwiftUI/UIKit bên trong màn hình Compose**, xem [hướng dẫn widget iOS](ios-widget-interop.md). Mẫu số lượng đặt hàng đã được tích hợp; đây là chiều nhúng khác với đặt Compose trong SwiftUI và khác với mở sheet native riêng.
+
 Dự án mở thẳng **giao diện Compose dùng chung** khi khởi động iOS. `iOSApp.swift` tạo `ContentView`, còn `ContentView` đặt `ComposeView` làm màn hình gốc. Những màn hình chỉ dành cho iOS được viết bằng SwiftUI hoặc UIKit trong `app/iosApp` và được mở khi Compose gọi callback do iOS host cung cấp. Cách này cho phép Compose giữ state và điều hướng dùng chung, đồng thời vẫn dùng giao diện native ở những chỗ cần thiết.
 
 ## Bản đồ dự án
@@ -37,7 +41,7 @@ sourceSets {
 
 Khi Swift cần gọi trực tiếp một kiểu trong `core`, thêm `api(project(":core"))` vào `commonMain.dependencies` của `sharedUI` và `export(project(":core"))` vào mỗi cấu hình framework của `sharedUI`. Chỉ export các module cần thiết; cấu hình hiện tại không bật `transitiveExport`. Thư viện Compose và chi tiết lưu trữ/network tiếp tục là phần hiện thực, không cần xuất toàn bộ sang Swift.
 
-Dự án tham khảo `fixvietnamerp` được dùng làm mẫu tích hợp iOS. Dự án hiện tại `fixvietnam_erp` vẫn dùng Compose cho Web với cả JS và Wasm; phần React của dự án tham khảo không được chuyển sang đây.
+Dự án tham khảo `fixvietnamerp` được dùng làm mẫu tích hợp iOS và chia sẻ logic với React. Web hiện giữ Compose JS/Wasm làm giao diện mặc định, đồng thời có host React/Next.js cho các trang cần SEO và accessibility; xem [hướng dẫn Web](web-ui-development.md).
 
 ## Màn hình dùng chung: Compose làm root
 
@@ -53,7 +57,7 @@ fun App(
 }
 ```
 
-Android, Desktop và Web tiếp tục gọi `App()` không tham số nên không thấy nút iOS. `sharedUI/src/iosMain/kotlin/com/example/fixvietnam_erp/MainViewController.kt` tạo `UIViewController` cho SwiftUI và truyền hai callback vào `App`:
+Android và Desktop tiếp tục gọi `App()` không tham số. Web chỉ truyền callback riêng `onOpenWebCatalog`; cả ba không thấy nút iOS. `sharedUI/src/iosMain/kotlin/com/example/fixvietnam_erp/MainViewController.kt` tạo `UIViewController` cho SwiftUI và truyền hai callback native vào `App`:
 
 ```kotlin
 package com.example.fixvietnam_erp
